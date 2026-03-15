@@ -200,9 +200,9 @@ If action is "move", specify direction in a "direction" key (one of: "up", "down
 If action is "wait", do not include a "dialogue" key.
 
 Example responses:
-{{"action": "wait"}}
-{{"action": "move", "direction": "up"}}
-{{"action": "talk", "dialogue": "Greetings, friend!"}}
+{"action": "wait"}
+{"action": "move", "direction": "up"}
+{"action": "talk", "dialogue": "Greetings, friend!"}
 
 Output ONLY the JSON, nothing else.
 """
