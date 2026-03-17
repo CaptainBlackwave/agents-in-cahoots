@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  agents:
+    build: .
+    ports:
+      - "8501:8501"
+    environment:
+      - DATABASE_URL=/app/data/game_state.db
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - LLM_API_URL=${LLM_API_URL:-https://api.openai.com/v1/chat/completions}
+      - LLM_MODEL=${LLM_MODEL:-gpt-3.5-turbo}
+      - MOCK_MODE=${MOCK_MODE:-false}
+      - LANGSMITH_API_KEY=${LANGSMITH_API_KEY}
+    volumes:
+      - ./data:/app/data
+    networks:
+      - agent-network
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:15
+    environment:
+      - POSTGRES_USER=agents
+      - POSTGRES_PASSWORD=agents
+      - POSTGRES_DB=agents_in_cahoots
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - agent-network
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    networks:
+      - agent-network
+    restart: unless-stopped
+
+volumes:
+  postgres-data:
+
+networks:
+  agent-network:
+    driver: bridge
